@@ -51,6 +51,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun carregarMarcas(){
+        adapter.clear()
+        adapterModelo.clear()
+        adapterAno.clear()
         val call = RetrofitInitializer().carroService().listarMarcas()
         call.enqueue(object : Callback<List<Marca>> {
             override fun onResponse(call: Call<List<Marca>?>?, response: Response<List<Marca>?>?) {
@@ -65,13 +68,15 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
     private fun carregarModelos(){
+        adapterModelo.clear()
+        adapterAno.clear()
         val positionMarca = spinner.selectedItemPosition
         val codigoMarca = adapter.getItem(positionMarca)!!.codigo
         val call = RetrofitInitializer().carroService().listarModelos(codigoMarca)
         call.enqueue(object : Callback<ModelosResposta> {
             override fun onResponse(call: Call<ModelosResposta>?, response: Response<ModelosResposta>?) {
                 response?.body()?.let {
-                    adapterModelo?.addAll(it.modelos)
+                    adapterModelo.addAll(it.modelos)
                 }
             }
             override fun onFailure(call: Call<ModelosResposta>, t: Throwable) {
@@ -80,6 +85,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
     private fun carregarAnos(){
+        adapterAno.clear()
         val positionMarca = spinner.selectedItemPosition
         val codigoMarca = adapter.getItem(positionMarca)!!.codigo
         val positionModelo = spinnerModelo.selectedItemPosition
@@ -88,7 +94,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         call.enqueue(object : Callback<List<ModeloAno>> {
             override fun onResponse(call: Call<List<ModeloAno>?>?, response: Response<List<ModeloAno>?>?) {
                 response?.body()?.let {
-                    adapterAno?.addAll(it)
+                    adapterAno.addAll(it)
                 }
             }
             override fun onFailure(call: Call<List<ModeloAno>>, t: Throwable) {
