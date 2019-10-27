@@ -1,4 +1,4 @@
-package com.example.consultafipe
+package com.example.consultafipe.services
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
