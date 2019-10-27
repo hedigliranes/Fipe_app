@@ -89,7 +89,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val positionMarca = spinner.selectedItemPosition
         val codigoMarca = adapter.getItem(positionMarca)!!.codigo
         val positionModelo = spinnerModelo.selectedItemPosition
-        val codigoModelo = adapter.getItem(positionModelo)!!.codigo
+        val codigoModelo = adapterModelo.getItem(positionModelo)!!.codigo
         val call = RetrofitInitializer().carroService().listarAnos(codigoMarca, codigoModelo)
         call.enqueue(object : Callback<List<ModeloAno>> {
             override fun onResponse(call: Call<List<ModeloAno>?>?, response: Response<List<ModeloAno>?>?) {
@@ -106,14 +106,14 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val positionMarca = spinner.selectedItemPosition
         val codigoMarca = adapter.getItem(positionMarca)!!.codigo
         val positionModelo = spinnerModelo.selectedItemPosition
-        val codigoModelo = adapter.getItem(positionModelo)!!.codigo
+        val codigoModelo = adapterModelo.getItem(positionModelo)!!.codigo
         val positionAno = spinnerAno.selectedItemPosition
-        val codigoAno = adapter.getItem(positionAno)!!.codigo
+        val codigoAno = adapterAno.getItem(positionAno)!!.codigo
         val call = RetrofitInitializer().carroService().obterCarro(codigoMarca, codigoModelo, codigoAno)
         call.enqueue(object : Callback<Carro> {
             override fun onResponse(call: Call<Carro>?, response: Response<Carro>?) {
                 response?.body()?.let {
-                    valorVeiculo.text = "Preço: " + it.Valor
+                    valorVeiculo.text = "Preço: ${it.Valor}"
                 }
             }
             override fun onFailure(call: Call<Carro>, t: Throwable) {
