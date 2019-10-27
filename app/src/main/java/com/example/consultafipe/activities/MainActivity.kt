@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     }
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        var marca: String = adapter?.getItem(p2)!!.nome
+        val marca: String = adapter?.getItem(p2)!!.nome
         Toast.makeText(this, marca, Toast.LENGTH_LONG).show()
     }
 
@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         spinner.adapter = adapter
         spinner.onItemSelectedListener = this
         this.carregarMarcas()
+
 
     }
 
