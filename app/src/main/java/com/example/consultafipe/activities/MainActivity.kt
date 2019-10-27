@@ -26,8 +26,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     }
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        val marca: String = adapter.getItem(p2)!!.nome
-        Toast.makeText(this, marca, Toast.LENGTH_LONG).show()
+        var text: String = ""
+        when(p0?.adapter){
+            adapter -> {text = adapter.getItem(p2)!!.nome;this.carregarModelos(adapter.getItem(p2)!!.codigo)}
+            adapterModelo -> {text = adapterModelo.getItem(p2)!!.nome}
+            adapterAno -> text = adapterAno.getItem(p2)!!.nome
+        }
+        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,9 +42,15 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
         spinner.adapter = adapter
         spinner.onItemSelectedListener = this
+        adapterModelo = ArrayAdapter(this,android.R.layout.simple_spinner_item)
+        adapterModelo.setDropDownViewResource(android.R.layout.simple_spinner_item)
+        spinnerModelo.adapter = adapter
+        spinnerModelo.onItemSelectedListener = this
+        adapterAno = ArrayAdapter(this,android.R.layout.simple_spinner_item)
+        adapterAno.setDropDownViewResource(android.R.layout.simple_spinner_item)
+        spinnerAno.adapter = adapter
+        spinnerAno.onItemSelectedListener = this
         this.carregarMarcas()
-
-
     }
 
     private fun carregarMarcas(){
@@ -56,15 +67,28 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
         })
     }
-    private fun carregarModelos(){
-        val call = RetrofitInitializer().carroService().listarModelos(1)
+    private fun carregarModelos(codigoMarca: String){
+        val call = RetrofitInitializer().carroService().listarModelos(codigoMarca)
         call.enqueue(object : Callback<List<Modelo>> {
             override fun onResponse(call: Call<List<Modelo>?>?, response: Response<List<Modelo>?>?) {
                 response?.body()?.let {
-//                    adapter?.addAll(it)
+                    adapterModelo?.addAll(it)
                 }
             }
             override fun onFailure(call: Call<List<Modelo>>, t: Throwable) {
+                exibirErro(t)
+            }
+        })
+    }
+    private fun carregarAnos(codigoMarca: String, codigoModelo: Int){
+        val call = RetrofitInitializer().carroService().listarAnos(codigoMarca, codigoModelo)
+        call.enqueue(object : Callback<List<ModeloAno>> {
+            override fun onResponse(call: Call<List<ModeloAno>?>?, response: Response<List<ModeloAno>?>?) {
+                response?.body()?.let {
+                    adapterAno?.addAll(it)
+                }
+            }
+            override fun onFailure(call: Call<List<ModeloAno>>, t: Throwable) {
                 exibirErro(t)
             }
         })

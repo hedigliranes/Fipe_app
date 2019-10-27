@@ -13,14 +13,14 @@ interface CarroService {
     @GET("carros/marcas")
     fun listarMarcas(): Call<List<Marca>>
     @GET("carros/marcas/{codigo}/modelos")
-    fun listarModelos(@Path("codigo") codigo: Int): Call<List<Modelo>>
+    fun listarModelos(@Path("codigo_marca") codigoMarca: String): Call<List<Modelo>>
     @GET("carros/marcas/{codigo_marca}/modelos/{codigo_modelo}/anos")
     fun listarAnos(
-        @Path("codigo_marca") codigoMarca: Int,
+        @Path("codigo_marca") codigoMarca: String,
         @Path("codigo_modelo") codigoModelo: Int): Call<List<ModeloAno>>
     @GET("carros/marcas/{codigo_marca}/modelos/{codigo_modelo}/anos/{codigo_ano}")
     fun obterCarro(
-        @Path("codigo_marca") codigoMarca: Int,
+        @Path("codigo_marca") codigoMarca: String,
         @Path("codigo_modelo") codigoModelo: Int,
         @Path("codigo_ano") codigoAno: Int): Call<Carro>
 }
