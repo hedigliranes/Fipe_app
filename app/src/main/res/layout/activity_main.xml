@@ -42,8 +42,22 @@
         android:layout_marginTop="20dp"
         android:id="@+id/spinnerAno">
     </Spinner>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:text="Preço do seu veiculo: "
+        style="?android:attr/textAppearanceLarge"/>
     <TextView
         android:id="@+id/valorVeiculo"
+        android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text=""
