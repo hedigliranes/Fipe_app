@@ -7,16 +7,22 @@ import retrofit2.http.Path
 
 interface CarroService {
 
-    @GET("carros/marcas")
-    fun listarMarcas(): Call<List<Marca>>
-    @GET("carros/marcas/{codigo_marca}/modelos")
-    fun listarModelos(@Path("codigo_marca") codigoMarca: String): Call<ModelosResposta>
-    @GET("carros/marcas/{codigo_marca}/modelos/{codigo_modelo}/anos")
+    @GET("{nome_tipo}/marcas")
+    fun listarMarcas(
+        @Path("nome_tipo") nomeTipo: String
+    ): Call<List<Marca>>
+    @GET("{nome_tipo}/marcas/{codigo_marca}/modelos")
+    fun listarModelos(
+        @Path("nome_tipo") nomeTipo: String,
+        @Path("codigo_marca") codigoMarca: String): Call<ModelosResposta>
+    @GET("{nome_tipo}/marcas/{codigo_marca}/modelos/{codigo_modelo}/anos")
     fun listarAnos(
+        @Path("nome_tipo") nomeTipo: String,
         @Path("codigo_marca") codigoMarca: String,
         @Path("codigo_modelo") codigoModelo: Int): Call<List<ModeloAno>>
-    @GET("carros/marcas/{codigo_marca}/modelos/{codigo_modelo}/anos/{codigo_ano}")
+    @GET("{nome_tipo}/marcas/{codigo_marca}/modelos/{codigo_modelo}/anos/{codigo_ano}")
     fun obterCarro(
+        @Path("nome_tipo") nomeTipo: String,
         @Path("codigo_marca") codigoMarca: String,
         @Path("codigo_modelo") codigoModelo: Int,
         @Path("codigo_ano") codigoAno: String): Call<Carro>

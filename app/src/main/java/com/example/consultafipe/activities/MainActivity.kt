@@ -13,28 +13,44 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import android.widget.ProgressBar
 
+
+
+/* todo
+* escolher tipo do veiculoo
+* favoritar um veiculo
+* lista de favoritos
+* historico de preços
+* broadcast para agendar a consulta diariamente
+* */
 class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var adapter: ArrayAdapter<Marca>
     private lateinit var adapterModelo: ArrayAdapter<Modelo>
     private lateinit var adapterAno: ArrayAdapter<ModeloAno>
+    private lateinit var adapterTipo: ArrayAdapter<String>
+
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
     }
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        var text = ""
+        progress.visibility = View.VISIBLE
         when(p0?.adapter){
-            adapter -> {text = adapter.getItem(p2)!!.nome;this.carregarModelos()}
-            adapterModelo -> {text = adapterModelo.getItem(p2)!!.nome;this.carregarAnos()}
-            adapterAno -> {text = adapterAno.getItem(p2)!!.nome;this.carregarCarro()}
+            adapter -> this.carregarModelos()
+            adapterModelo -> this.carregarAnos()
+            adapterAno -> this.carregarCarro()
+            adapterTipo -> this.carregarMarcas()
         }
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        adapterTipo = ArrayAdapter(this,android.R.layout.simple_spinner_item, arrayOf("carros", "motos", "caminhoes"))
+        adapterTipo.setDropDownViewResource(android.R.layout.simple_spinner_item)
+        spinnerTipo.adapter = adapterTipo
+        spinnerTipo.onItemSelectedListener = this
         adapter = ArrayAdapter(this,android.R.layout.simple_spinner_item)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
         spinner.adapter = adapter
@@ -47,14 +63,17 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         adapterAno.setDropDownViewResource(android.R.layout.simple_spinner_item)
         spinnerAno.adapter = adapterAno
         spinnerAno.onItemSelectedListener = this
+        progress.visibility = View.VISIBLE
         this.carregarMarcas()
     }
 
     private fun carregarMarcas(){
+        val positionTipo = spinnerTipo.selectedItemPosition
+        val nomeTipo = adapterTipo.getItem(positionTipo)!!
         adapter.clear()
         adapterModelo.clear()
         adapterAno.clear()
-        val call = RetrofitInitializer().carroService().listarMarcas()
+        val call = RetrofitInitializer().carroService().listarMarcas(nomeTipo)
         call.enqueue(object : Callback<List<Marca>> {
             override fun onResponse(call: Call<List<Marca>?>?, response: Response<List<Marca>?>?) {
                 response?.body()?.let {
@@ -68,11 +87,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
     private fun carregarModelos(){
+        val positionTipo = spinnerTipo.selectedItemPosition
+        val nomeTipo = adapterTipo.getItem(positionTipo)!!
         adapterModelo.clear()
         adapterAno.clear()
         val positionMarca = spinner.selectedItemPosition
         val codigoMarca = adapter.getItem(positionMarca)!!.codigo
-        val call = RetrofitInitializer().carroService().listarModelos(codigoMarca)
+        val call = RetrofitInitializer().carroService().listarModelos(nomeTipo, codigoMarca)
         call.enqueue(object : Callback<ModelosResposta> {
             override fun onResponse(call: Call<ModelosResposta>?, response: Response<ModelosResposta>?) {
                 response?.body()?.let {
@@ -85,12 +106,14 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
     private fun carregarAnos(){
+        val positionTipo = spinnerTipo.selectedItemPosition
+        val nomeTipo = adapterTipo.getItem(positionTipo)!!
         adapterAno.clear()
         val positionMarca = spinner.selectedItemPosition
         val codigoMarca = adapter.getItem(positionMarca)!!.codigo
         val positionModelo = spinnerModelo.selectedItemPosition
         val codigoModelo = adapterModelo.getItem(positionModelo)!!.codigo
-        val call = RetrofitInitializer().carroService().listarAnos(codigoMarca, codigoModelo)
+        val call = RetrofitInitializer().carroService().listarAnos(nomeTipo, codigoMarca, codigoModelo)
         call.enqueue(object : Callback<List<ModeloAno>> {
             override fun onResponse(call: Call<List<ModeloAno>?>?, response: Response<List<ModeloAno>?>?) {
                 response?.body()?.let {
@@ -103,17 +126,20 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         })
     }
     private fun carregarCarro(){
+        val positionTipo = spinnerTipo.selectedItemPosition
+        val nomeTipo = adapterTipo.getItem(positionTipo)!!
         val positionMarca = spinner.selectedItemPosition
         val codigoMarca = adapter.getItem(positionMarca)!!.codigo
         val positionModelo = spinnerModelo.selectedItemPosition
         val codigoModelo = adapterModelo.getItem(positionModelo)!!.codigo
         val positionAno = spinnerAno.selectedItemPosition
         val codigoAno = adapterAno.getItem(positionAno)!!.codigo
-        val call = RetrofitInitializer().carroService().obterCarro(codigoMarca, codigoModelo, codigoAno)
+        val call = RetrofitInitializer().carroService().obterCarro(nomeTipo, codigoMarca, codigoModelo, codigoAno)
         call.enqueue(object : Callback<Carro> {
             override fun onResponse(call: Call<Carro>?, response: Response<Carro>?) {
                 response?.body()?.let {
                     valorVeiculo.text = "Preço: ${it.Valor}"
+                    progress.visibility = View.GONE
                 }
             }
             override fun onFailure(call: Call<Carro>, t: Throwable) {

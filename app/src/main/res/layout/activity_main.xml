@@ -6,7 +6,17 @@
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".activities.MainActivity">
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Escolha o tipo do veículo:"
+        style="?android:attr/textAppearanceLarge"/>
+    <Spinner
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:id="@+id/spinnerTipo">
+    </Spinner>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,5 +72,11 @@
         android:layout_height="wrap_content"
         android:text=""
         style="?android:attr/textAppearanceLarge"/>
+    <ProgressBar
+        android:layout_gravity="center"
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
