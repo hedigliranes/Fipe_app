@@ -1,6 +1,7 @@
 package com.example.consultafipe.dominio
 
 data class Carro (
+    var id: Long,
     var Valor: String,
     var Marca: String,
     var Modelo: String,
