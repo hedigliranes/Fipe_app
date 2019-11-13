@@ -6,6 +6,11 @@
     android:orientation="vertical"
     android:padding="16dp"
     tools:context=".activities.MainActivity">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="scheduleJob"
+        android:text="Schedule Job" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
