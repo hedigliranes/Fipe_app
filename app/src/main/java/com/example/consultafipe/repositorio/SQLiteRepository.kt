@@ -7,7 +7,7 @@ import com.example.consultafipe.dominio.Carro
 
 class SQLiteRepository(ctx: Context):VeiculoRepository {
 
-    private  val helper:VeiculoSqlHelper =VeiculoSqlHelper(ctx)
+    private  val helper: VeiculoSqlHelper = VeiculoSqlHelper(ctx)
 
     private fun insert(veiculo: Carro){
 
@@ -78,7 +78,7 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
     }
 
 
-    override  fun list(callback: (MutableList<Carro>)->Unit){
+    override fun list(callback: (MutableList<Carro>)->Unit){
         var sql = "SELECT * FROM $TABLE_NAME"
         val args: Array<String>? = null
         sql += " ORDER BY $COLUMN_ID"
@@ -86,7 +86,7 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
         val cursor = db.rawQuery(sql, args)
         val veiculos = ArrayList<Carro>()
         while (cursor.moveToNext()){
-            val veiculo = VeiculoFromCursor(cursor)
+            val veiculo = veiculoFromCursor(cursor)
             veiculos.add(veiculo)
         }
         cursor.close()
@@ -95,7 +95,7 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
         callback(veiculos)
     }
 
-    private fun VeiculoFromCursor(cursor: Cursor): Carro {
+    private fun veiculoFromCursor(cursor: Cursor): Carro {
         val id = cursor.getLong(cursor.getColumnIndex(COLUMN_ID))
         val Valor = cursor.getString(cursor.getColumnIndex(COLUMN_VALOR))
         val Marca = cursor.getString(cursor.getColumnIndex(COLUMN_MARCA))
