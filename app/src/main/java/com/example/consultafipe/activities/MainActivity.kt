@@ -14,7 +14,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import android.widget.ProgressBar
-
+import com.example.consultafipe.repositorio.VeiculoRepository
 
 
 /* todo
@@ -30,6 +30,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var adapterModelo: ArrayAdapter<Modelo>
     private lateinit var adapterAno: ArrayAdapter<ModeloAno>
     private lateinit var adapterTipo: ArrayAdapter<String>
+    private lateinit var veiculo: Carro
+    private lateinit var repository: VeiculoRepository;
 
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -138,6 +140,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         call.enqueue(object : Callback<Carro> {
             override fun onResponse(call: Call<Carro>?, response: Response<Carro>?) {
                 response?.body()?.let {
+                    veiculo = it
                     valorVeiculo.text = "Preço: ${it.Valor}"
                     progress.visibility = View.GONE
                 }
@@ -152,5 +155,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         Toast.makeText(this, t.message!!, Toast.LENGTH_LONG).show()
     }
 
+    fun addFav(view: View) {
+        repository.save(veiculo)
+    }
 
 }
