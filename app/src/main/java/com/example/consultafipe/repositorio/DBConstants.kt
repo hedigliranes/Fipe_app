@@ -2,7 +2,7 @@ package com.example.consultafipe.repositorio
 
 const val DATABASE_NAME = "dbfipe"
 const val DATABASE_VERSION = 1
-const val TABLE_NAME = "veiculos"
+const val TABLE_NAME = "favoritos"
 const val COLUMN_ID = "_id"
 const val COLUMN_VALOR = "valor"
 const val COLUMN_MARCA = "marca"
