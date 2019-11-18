@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         spinnerAno.adapter = adapterAno
         spinnerAno.onItemSelectedListener = this
         progress.visibility = View.VISIBLE
+        this.scheduleJob()
         this.carregarMarcas()
     }
 
@@ -159,12 +160,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         Toast.makeText(this, t.message!!, Toast.LENGTH_LONG).show()
     }
 
-    fun scheduleJob(view: View) {
-        val componentName = ComponentName(this, ConsultaService::class.java!!)
+    fun scheduleJob() {
+        val componentName = ComponentName(this, ConsultaService::class.java)
         val info = JobInfo.Builder(123, componentName)
-            .setRequiresCharging(true)
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
             .setPersisted(true)
+//            .setMinimumLatency(1)
+//            .setOverrideDeadline(1)
             .setPeriodic((15 * 60 * 1000).toLong())
             .build()
 

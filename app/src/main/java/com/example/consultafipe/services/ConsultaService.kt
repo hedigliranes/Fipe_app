@@ -9,9 +9,8 @@ class ConsultaService: JobService()   {
     private val TAG = "ConsultaJobService"
     private var jobCancelled = false
 
-    override
-    fun onStartJob(params: JobParameters): Boolean {
-        Log.d(TAG, "Job started")
+    override fun onStartJob(params: JobParameters): Boolean {
+        Log.d(TAG, "Job starteded")
         doBackgroundWork(params)
 
         return true
@@ -20,7 +19,7 @@ class ConsultaService: JobService()   {
     private fun doBackgroundWork(params: JobParameters) {
         Thread(Runnable {
 
-                Log.d(TAG, "run: teste")
+            Log.d(TAG, "run: teste")
 
 
             Log.d(TAG, "Job finished")
