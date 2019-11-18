@@ -19,7 +19,8 @@ class VeiculoSqlHelper(context: Context) :
                     "$COLUMN_CODIGOFIPE TEXT NOT NULL, "+
                     "$COLUMN_MESREFERENCIA TEXT NOT NULL, "+
                     "$COLUMN_TIPOVEICULO TEXT NOT NULL, "+
-                    "$COLUMN_SIGLACOMBUSTIVEL TEXT NOT NULL")
+                    "$COLUMN_SIGLACOMBUSTIVEL TEXT NOT NULL)")
+
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
