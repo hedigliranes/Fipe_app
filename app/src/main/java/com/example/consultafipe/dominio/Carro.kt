@@ -10,7 +10,11 @@ data class Carro (
     var CodigoFipe: String,
     var MesReferencia: String,
     var TipoVeiculo: Int,
-    var SiglaCombustivel: String
+    var SiglaCombustivel: String,
+    var NomeTipo: String,
+    var CodigoMarca: String,
+    var CodigoModelo: Int,
+    var CodigoAno: String
 ) {
     override fun toString(): String = Valor
 }

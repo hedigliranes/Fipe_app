@@ -168,6 +168,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         call.enqueue(object : Callback<Carro> {
             override fun onResponse(call: Call<Carro>?, response: Response<Carro>?) {
                 response?.body()?.let {
+                    it.NomeTipo = nomeTipo
+                    it.CodigoMarca = codigoMarca
+                    it.CodigoAno = codigoAno
+                    it.CodigoModelo = codigoModelo
                     veiculo = it
                     valorVeiculo.text = "Preço: ${it.Valor}"
                     progress.visibility = View.GONE
@@ -177,6 +181,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 exibirErro(t)
             }
         })
+
         this.cancelJob()
     }
 

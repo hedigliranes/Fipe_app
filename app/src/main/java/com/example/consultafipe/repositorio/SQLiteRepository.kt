@@ -3,6 +3,7 @@ package com.example.consultafipe.repositorio
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.util.Log
 import com.example.consultafipe.dominio.Carro
 
 class SQLiteRepository(ctx: Context):VeiculoRepository {
@@ -23,6 +24,10 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
             put(COLUMN_MODELO,veiculo.Modelo)
             put(COLUMN_SIGLACOMBUSTIVEL,veiculo.SiglaCombustivel)
             put(COLUMN_TIPOVEICULO,veiculo.TipoVeiculo)
+            put(COLUMN_CODIGOMARCA,veiculo.CodigoMarca)
+            put(COLUMN_NOMETIPO,veiculo.NomeTipo)
+            put(COLUMN_CODIGOMODELO,veiculo.CodigoModelo)
+            put(COLUMN_CODIGOANO,veiculo.CodigoAno)
         }
 
         val id = db.insert(TABLE_NAME, null, cv)
@@ -45,6 +50,10 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
             put(COLUMN_MODELO,veiculo.Modelo)
             put(COLUMN_SIGLACOMBUSTIVEL,veiculo.SiglaCombustivel)
             put(COLUMN_TIPOVEICULO,veiculo.TipoVeiculo)
+            put(COLUMN_CODIGOMARCA,veiculo.CodigoMarca)
+            put(COLUMN_NOMETIPO,veiculo.NomeTipo)
+            put(COLUMN_CODIGOMODELO,veiculo.CodigoModelo)
+            put(COLUMN_CODIGOANO,veiculo.CodigoAno)
         }
 
         db.update(
@@ -64,6 +73,7 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
             update(veiculo)
         }
     }
+
 
     override fun remove(veiculo:Carro) {
         val db = helper.writableDatabase
@@ -106,7 +116,12 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
         val MesReferencia = cursor.getString(cursor.getColumnIndex(COLUMN_MESREFERENCIA))
         val TipoVeiculo = cursor.getInt(cursor.getColumnIndex(COLUMN_TIPOVEICULO))
         val SiglaCombustivel = cursor.getString(cursor.getColumnIndex(COLUMN_SIGLACOMBUSTIVEL))
-        return Carro(id, Valor, Marca, Modelo, AnoModelo, Combustivel, CodigoFipe, MesReferencia, TipoVeiculo, SiglaCombustivel)
+        val NomeTipo = cursor.getString(cursor.getColumnIndex(COLUMN_NOMETIPO))
+        val CodigoMarca = cursor.getString(cursor.getColumnIndex(COLUMN_CODIGOMARCA))
+        val CodigoModelo = cursor.getInt(cursor.getColumnIndex(COLUMN_CODIGOMODELO))
+        val CodigoAno = cursor.getString(cursor.getColumnIndex(COLUMN_CODIGOANO))
+        return Carro(id, Valor, Marca, Modelo, AnoModelo, Combustivel, CodigoFipe, MesReferencia, TipoVeiculo, SiglaCombustivel,NomeTipo,
+            CodigoMarca,CodigoModelo,CodigoAno)
     }
 
 }

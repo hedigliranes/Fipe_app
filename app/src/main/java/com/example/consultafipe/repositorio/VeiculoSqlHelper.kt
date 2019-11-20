@@ -19,6 +19,10 @@ class VeiculoSqlHelper(context: Context) :
                     "$COLUMN_CODIGOFIPE TEXT NOT NULL, "+
                     "$COLUMN_MESREFERENCIA TEXT NOT NULL, "+
                     "$COLUMN_TIPOVEICULO TEXT NOT NULL, "+
+                    "$COLUMN_NOMETIPO TEXT NOT NULL, "+
+                    "$COLUMN_CODIGOMARCA TEXT NOT NULL, "+
+                    "$COLUMN_CODIGOMODELO TEXT NOT NULL, "+
+                    "$COLUMN_CODIGOANO TEXT NOT NULL, "+
                     "$COLUMN_SIGLACOMBUSTIVEL TEXT NOT NULL)")
 
     }
