@@ -60,13 +60,14 @@ class ConsultaService: JobService()   {
                         response?.body()?.let {
                             Log.d("Text",it.Valor)
                             veiculo.Valor = it.Valor
+                            veiculosRepository?.save(veiculo)
+
                         }
                     }
                     override fun onFailure(call: Call<Carro>, t: Throwable) {
                         Log.d("ERRO","ERRO")
                     }
                 })
-                veiculosRepository?.save(veiculo)
 
             }
 

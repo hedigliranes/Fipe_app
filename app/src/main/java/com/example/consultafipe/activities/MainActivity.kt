@@ -173,6 +173,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     it.CodigoAno = codigoAno
                     it.CodigoModelo = codigoModelo
                     veiculo = it
+                    it.Valor = "R$ 500"
                     valorVeiculo.text = "Preço: ${it.Valor}"
                     progress.visibility = View.GONE
                 }
