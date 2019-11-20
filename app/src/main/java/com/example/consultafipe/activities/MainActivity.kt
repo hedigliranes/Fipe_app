@@ -25,6 +25,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.util.Log
 import com.example.consultafipe.R
+import com.example.consultafipe.notifications.PriceNotification
 import com.example.consultafipe.services.ConsultaService
 
 
@@ -49,6 +50,10 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
         progress.visibility = View.VISIBLE
+        btAddFav.visibility = View.GONE
+        valorVeiculo.visibility = View.GONE
+        labelValor.visibility = View.INVISIBLE
+
         when(p0?.adapter){
             adapter -> this.carregarModelos()
             adapterModelo -> this.carregarAnos()
@@ -173,9 +178,13 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     it.CodigoAno = codigoAno
                     it.CodigoModelo = codigoModelo
                     veiculo = it
-                    it.Valor = "R$ 500"
                     valorVeiculo.text = "Preço: ${it.Valor}"
                     progress.visibility = View.GONE
+                    btAddFav.visibility = View.VISIBLE
+                    valorVeiculo.visibility = View.VISIBLE
+                    labelValor.visibility = View.VISIBLE
+
+
                 }
             }
             override fun onFailure(call: Call<Carro>, t: Throwable) {
@@ -193,6 +202,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     fun addFav(view: View) {
         if(veiculo != null)
             repository.save(veiculo as Carro)
+
+        PriceNotification   .notificationWithAction(this)
     }
     fun scheduleJob() {
         val componentName = ComponentName(this, ConsultaService::class.java)

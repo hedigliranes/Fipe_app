@@ -2,21 +2,13 @@ package com.example.consultafipe.services
 
 import android.app.job.JobParameters
 import android.app.job.JobService
-import android.content.Context
 import android.util.Log
-import android.view.View
 import com.example.consultafipe.dominio.Carro
 import com.example.consultafipe.repositorio.SQLiteRepository
-import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import com.example.consultafipe.adapter.VeiculoAdapter
-import com.example.consultafipe.repositorio.VeiculoSqlHelper
-import kotlinx.android.synthetic.main.activity_fav.*
+
 
 
 class ConsultaService: JobService()   {
