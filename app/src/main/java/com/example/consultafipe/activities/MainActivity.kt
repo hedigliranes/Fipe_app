@@ -6,7 +6,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.example.consultafipe.R
 import com.example.consultafipe.dominio.*
 import com.example.consultafipe.services.RetrofitInitializer
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,9 +15,17 @@ import retrofit2.Response
 import android.widget.ProgressBar
 import com.example.consultafipe.repositorio.VeiculoRepository
 
+import android.app.job.JobScheduler
+import android.app.job.JobInfo
+import android.content.ComponentName
+
+import android.content.Context
+import android.util.Log
+import com.example.consultafipe.R
+import com.example.consultafipe.services.ConsultaService
+
 
 /* todo
-* escolher tipo do veiculoo
 * favoritar um veiculo
 * lista de favoritos
 * historico de preços
@@ -32,6 +39,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var adapterTipo: ArrayAdapter<String>
     private lateinit var veiculo: Carro
     private lateinit var repository: VeiculoRepository;
+    private val TAG = "MainActivity"
 
 
     override fun onNothingSelected(p0: AdapterView<*>?) {
@@ -66,6 +74,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         spinnerAno.adapter = adapterAno
         spinnerAno.onItemSelectedListener = this
         progress.visibility = View.VISIBLE
+        this.scheduleJob()
         this.carregarMarcas()
     }
 
@@ -149,6 +158,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                 exibirErro(t)
             }
         })
+        this.cancelJob()
     }
 
     private fun exibirErro(t:Throwable){
@@ -158,5 +168,30 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     fun addFav(view: View) {
         repository.save(veiculo)
     }
+    fun scheduleJob() {
+        val componentName = ComponentName(this, ConsultaService::class.java)
+        val info = JobInfo.Builder(123, componentName)
+            .setRequiredNetworkType(JobInfo.NETWORK_TYPE_UNMETERED)
+            .setPersisted(true)
+//            .setMinimumLatency(1)
+//            .setOverrideDeadline(1)
+            .setPeriodic((15 * 60 * 1000).toLong())
+            .build()
+
+        val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        val resultCode = scheduler.schedule(info)
+        if (resultCode == JobScheduler.RESULT_SUCCESS) {
+            Log.d(TAG  , "Job scheduled")
+        } else {
+            Log.d(TAG, "Job scheduling failed")
+        }
+    }
+
+    fun cancelJob() {
+        val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+        scheduler.cancel(123)
+        Log.d(TAG, "Job cancelled")
+    }
+
 
 }
