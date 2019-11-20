@@ -9,6 +9,7 @@ import com.example.consultafipe.R
 import com.example.consultafipe.dominio.Carro
 import kotlinx.android.synthetic.main.item_veiculo.view.*
 
+
 class VeiculoAdapter (
     var veiculos: List<Carro>,
     private val callback: (Carro, Int) -> Unit,
