@@ -1,7 +1,10 @@
 package com.example.consultafipe.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -12,7 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.widget.ProgressBar
+import com.example.consultafipe.repositorio.SQLiteRepository
 import com.example.consultafipe.repositorio.VeiculoRepository
 
 import android.app.job.JobScheduler
@@ -37,7 +40,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var adapterModelo: ArrayAdapter<Modelo>
     private lateinit var adapterAno: ArrayAdapter<ModeloAno>
     private lateinit var adapterTipo: ArrayAdapter<String>
-    private lateinit var veiculo: Carro
+    private var veiculo: Carro? = null
     private lateinit var repository: VeiculoRepository;
     private val TAG = "MainActivity"
 
@@ -75,9 +78,25 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         spinnerAno.onItemSelectedListener = this
         progress.visibility = View.VISIBLE
         this.scheduleJob()
+        repository = SQLiteRepository(this)
         this.carregarMarcas()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        if(id == R.id.menuFav){
+            var myIntent = Intent(this, FavActivity::class.java)
+            startActivity(myIntent)
+            return true
+        } else {
+            return super.onOptionsItemSelected(item)
+        }
+    }
     private fun carregarMarcas(){
         val positionTipo = spinnerTipo.selectedItemPosition
         val nomeTipo = adapterTipo.getItem(positionTipo)!!
@@ -166,7 +185,8 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     fun addFav(view: View) {
-        repository.save(veiculo)
+        if(veiculo != null)
+            repository.save(veiculo as Carro)
     }
     fun scheduleJob() {
         val componentName = ComponentName(this, ConsultaService::class.java)
