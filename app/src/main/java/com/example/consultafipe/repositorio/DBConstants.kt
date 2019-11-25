@@ -5,6 +5,7 @@ const val DATABASE_VERSION = 1
 const val TABLE_NAME = "favoritos"
 const val COLUMN_ID = "_id"
 const val COLUMN_VALOR = "valor"
+const val COLUMN_VALORANTIGO = "valorantigo"
 const val COLUMN_MARCA = "marca"
 const val COLUMN_MODELO = "modelo"
 const val COLUMN_ANOMODELO = "anomodelo"

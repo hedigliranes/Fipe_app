@@ -16,6 +16,7 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
 
         val cv = ContentValues().apply {
             put(COLUMN_VALOR,veiculo.Valor)
+            put(COLUMN_VALORANTIGO,veiculo.Valor)
             put(COLUMN_ANOMODELO, veiculo.AnoModelo)
             put(COLUMN_CODIGOFIPE, veiculo.CodigoFipe)
             put(COLUMN_COMBUSTIVEL,veiculo.Combustivel)
@@ -42,6 +43,7 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
 
         val cv = ContentValues().apply {
             put(COLUMN_VALOR,veiculo.Valor)
+            put(COLUMN_VALORANTIGO,veiculo.Valor)
             put(COLUMN_ANOMODELO, veiculo.AnoModelo)
             put(COLUMN_CODIGOFIPE, veiculo.CodigoFipe)
             put(COLUMN_COMBUSTIVEL,veiculo.Combustivel)
@@ -68,6 +70,7 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
 
     override fun save(veiculo:Carro) {
         if (veiculo.id == 0L){
+            veiculo.ValorAntigo = veiculo.Valor
             insert(veiculo)
         }else{
             update(veiculo)
@@ -104,10 +107,25 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
 
         callback(veiculos)
     }
+    override fun list(id:Long, callback: (carro: Carro?)->Unit){
+        var sql = "SELECT * FROM $TABLE_NAME"
+        val args: Array<String>? = arrayOf(" WHERE ${COLUMN_ID} = ${id}")
+        sql += " ORDER BY $COLUMN_ID"
+        val db = helper.readableDatabase
+        val cursor = db.rawQuery(sql, args)
+        var veiculo:Carro? = null
+        if(cursor.moveToNext()){
+            veiculo= veiculoFromCursor(cursor)
+        }
+        cursor.close()
+        db.close()
+        callback(veiculo)
+    }
 
     private fun veiculoFromCursor(cursor: Cursor): Carro {
         val id = cursor.getLong(cursor.getColumnIndex(COLUMN_ID))
         val Valor = cursor.getString(cursor.getColumnIndex(COLUMN_VALOR))
+        val ValorAntigo = cursor.getString(cursor.getColumnIndex(COLUMN_VALORANTIGO))
         val Marca = cursor.getString(cursor.getColumnIndex(COLUMN_MARCA))
         val Modelo = cursor.getString(cursor.getColumnIndex(COLUMN_MODELO))
         val AnoModelo = cursor.getInt(cursor.getColumnIndex(COLUMN_ANOMODELO))
@@ -120,7 +138,7 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
         val CodigoMarca = cursor.getString(cursor.getColumnIndex(COLUMN_CODIGOMARCA))
         val CodigoModelo = cursor.getInt(cursor.getColumnIndex(COLUMN_CODIGOMODELO))
         val CodigoAno = cursor.getString(cursor.getColumnIndex(COLUMN_CODIGOANO))
-        return Carro(id, Valor, Marca, Modelo, AnoModelo, Combustivel, CodigoFipe, MesReferencia, TipoVeiculo, SiglaCombustivel,NomeTipo,
+        return Carro(id, Valor, ValorAntigo, Marca, Modelo, AnoModelo, Combustivel, CodigoFipe, MesReferencia, TipoVeiculo, SiglaCombustivel,NomeTipo,
             CodigoMarca,CodigoModelo,CodigoAno)
     }
 

@@ -4,6 +4,7 @@ import android.app.job.JobParameters
 import android.app.job.JobService
 import android.util.Log
 import com.example.consultafipe.dominio.Carro
+import com.example.consultafipe.notifications.PriceNotification
 import com.example.consultafipe.repositorio.SQLiteRepository
 import retrofit2.Call
 import retrofit2.Callback
@@ -40,6 +41,7 @@ class ConsultaService: JobService()   {
 
     private fun doBackgroundWork(params: JobParameters) {
         veiculosRepository = SQLiteRepository(this)
+        var valueChange = false
 
         Thread(Runnable {
 
@@ -51,6 +53,10 @@ class ConsultaService: JobService()   {
                     override fun onResponse(call: Call<Carro>?, response: Response<Carro>?) {
                         response?.body()?.let {
                             Log.d("Text",it.Valor)
+                            if(it.Valor < veiculo.Valor) {
+                                valueChange = true
+                            }
+                            veiculo.ValorAntigo = veiculo.Valor
                             veiculo.Valor = it.Valor
                             veiculosRepository?.save(veiculo)
 
@@ -60,7 +66,9 @@ class ConsultaService: JobService()   {
                         Log.d("ERRO","ERRO")
                     }
                 })
-
+            }
+            if(valueChange) {
+                PriceNotification.notificationWithAction(this)
             }
 
             Log.d(TAG, "Job finished")

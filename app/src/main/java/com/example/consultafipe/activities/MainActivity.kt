@@ -27,6 +27,7 @@ import android.util.Log
 import com.example.consultafipe.R
 import com.example.consultafipe.notifications.PriceNotification
 import com.example.consultafipe.services.ConsultaService
+import kotlinx.android.synthetic.main.activity_list_veiculo.*
 
 
 /* todo
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         btAddFav.visibility = View.GONE
         valorVeiculo.visibility = View.GONE
         labelValor.visibility = View.INVISIBLE
+        btDet.visibility = View.INVISIBLE
 
         when(p0?.adapter){
             adapter -> this.carregarModelos()
@@ -183,7 +185,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     btAddFav.visibility = View.VISIBLE
                     valorVeiculo.visibility = View.VISIBLE
                     labelValor.visibility = View.VISIBLE
-
+                    btDet.visibility = View.VISIBLE
 
                 }
             }
@@ -200,10 +202,18 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     fun addFav(view: View) {
-        if(veiculo != null)
-            repository.save(veiculo as Carro)
 
-        PriceNotification   .notificationWithAction(this)
+        if(veiculo != null) {
+            var veiculoSalvo:Carro? = null
+
+            repository.list(veiculo!!.id){veiculoSalvo = it as Carro}
+            if(veiculoSalvo != null){
+                Toast.makeText(this, "Já existe", Toast.LENGTH_LONG).show()
+                veiculo = veiculoSalvo
+            } else {
+                repository.save(veiculo as Carro)
+            }
+        }
     }
     fun scheduleJob() {
         val componentName = ComponentName(this, ConsultaService::class.java)
@@ -228,6 +238,18 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
         scheduler.cancel(123)
         Log.d(TAG, "Job cancelled")
+    }
+
+    fun verDet(view: View) {
+        var myIntent = Intent(this, VeiculoFavActivity::class.java)
+        myIntent.putExtra("modelo",veiculo!!.Modelo)
+        myIntent.putExtra("ano",veiculo!!.AnoModelo)
+        myIntent.putExtra("valor",veiculo!!.Valor)
+        myIntent.putExtra("marca",veiculo!!.Marca)
+        myIntent.putExtra("combustivel",veiculo!!.Combustivel)
+        myIntent.putExtra("mes",veiculo!!.MesReferencia)
+
+        startActivity(myIntent)
     }
 
 

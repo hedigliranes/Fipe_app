@@ -12,6 +12,7 @@ class VeiculoSqlHelper(context: Context) :
             "CREATE TABLE $TABLE_NAME("+
                     "$COLUMN_ID INTEGER PRIMARY KEY AUTOINCREMENT, "+
                     "$COLUMN_VALOR TEXT NOT NULL, "+
+                    "$COLUMN_VALORANTIGO TEXT, "+
                     "$COLUMN_MARCA TEXT NOT NULL, "+
                     "$COLUMN_MODELO TEXT NOT NULL, "+
                     "$COLUMN_ANOMODELO TEXT NOT NULL, "+

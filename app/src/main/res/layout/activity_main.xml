@@ -86,5 +86,11 @@
         android:layout_height="wrap_content"
         android:text="Acompanhar preço"
         android:id="@+id/btAddFav"/>
+    <Button
+        android:onClick="verDet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ver detalhes"
+        android:id="@+id/btDet"/>
 
 </LinearLayout>
