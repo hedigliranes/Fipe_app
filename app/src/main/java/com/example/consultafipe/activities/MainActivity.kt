@@ -206,9 +206,9 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         if(veiculo != null) {
             var veiculoSalvo:Carro? = null
 
-            repository.list(veiculo!!.id){veiculoSalvo = it as Carro}
+            veiculoSalvo = repository.getList(veiculo!!.CodigoFipe)
             if(veiculoSalvo != null){
-                Toast.makeText(this, "Já existe", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Veiculo já está nos favoritos!", Toast.LENGTH_LONG).show()
                 veiculo = veiculoSalvo
             } else {
                 repository.save(veiculo as Carro)
@@ -222,7 +222,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             .setPersisted(true)
 //            .setMinimumLatency(1)
 //            .setOverrideDeadline(1)
-            .setPeriodic((15 * 60 * 1000).toLong())
+            .setPeriodic((30 * 24 * 60 * 1000).toLong())
             .build()
 
         val scheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler

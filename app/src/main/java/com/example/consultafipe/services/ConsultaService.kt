@@ -20,6 +20,7 @@ class ConsultaService: JobService()   {
     private var veiculos = mutableListOf<Carro>()
 
 
+
     override fun onStartJob(params: JobParameters): Boolean {
         Log.d(TAG, "Job started")
 
@@ -39,9 +40,12 @@ class ConsultaService: JobService()   {
 
     }
 
+    private fun changeValue(){
+        PriceNotification.notificationWithAction(this)
+    }
+
     private fun doBackgroundWork(params: JobParameters) {
         veiculosRepository = SQLiteRepository(this)
-        var valueChange = false
 
         Thread(Runnable {
 
@@ -52,10 +56,19 @@ class ConsultaService: JobService()   {
                 call.enqueue(object : Callback<Carro> {
                     override fun onResponse(call: Call<Carro>?, response: Response<Carro>?) {
                         response?.body()?.let {
-                            Log.d("Text",it.Valor)
-                            if(it.Valor < veiculo.Valor) {
-                                valueChange = true
+                            var valorInt = it.Valor.replace("R$ ","").replace(".","").replace(",","").toInt()
+                            var valorNewInt = veiculo.Valor.replace("R$ ","").replace(".","").replace(",","").toInt()
+
+
+                            Log.d("TESTE",valorInt.toString())
+                            Log.d("TESTE",valorNewInt.toString())
+
+
+
+                            if(valorInt < valorNewInt) {
+                                changeValue()
                             }
+
                             veiculo.ValorAntigo = veiculo.Valor
                             veiculo.Valor = it.Valor
                             veiculosRepository?.save(veiculo)
@@ -67,13 +80,11 @@ class ConsultaService: JobService()   {
                     }
                 })
             }
-            if(valueChange) {
-                PriceNotification.notificationWithAction(this)
-            }
 
             Log.d(TAG, "Job finished")
             jobFinished(params, false)
         }).start()
+
     }
 
     override

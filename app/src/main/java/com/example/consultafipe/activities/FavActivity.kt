@@ -82,8 +82,11 @@ class FavActivity : AppCompatActivity() {
     }
 
     fun onVeiculoItemLongClick(veiculo: Carro, posicao: Int):Boolean{
+        veiculosRepository?.remove(veiculo)
 
+        updateList()
 
+        adapter?.notifyItemRemoved(posicao)
 
         return true
     }

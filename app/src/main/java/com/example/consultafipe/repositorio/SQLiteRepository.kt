@@ -107,19 +107,19 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
 
         callback(veiculos)
     }
-    override fun list(id:Long, callback: (carro: Carro?)->Unit){
-        var sql = "SELECT * FROM $TABLE_NAME"
-        val args: Array<String>? = arrayOf(" WHERE ${COLUMN_ID} = ${id}")
-        sql += " ORDER BY $COLUMN_ID"
+    override fun getList(id:String): Carro?{
+        var veiculo: Carro? = null
+
+        var sql = "SELECT * FROM $TABLE_NAME WHERE ${COLUMN_CODIGOFIPE} = ?"
+        val args: Array<String>? = arrayOf(id)
         val db = helper.readableDatabase
         val cursor = db.rawQuery(sql, args)
-        var veiculo:Carro? = null
-        if(cursor.moveToNext()){
-            veiculo= veiculoFromCursor(cursor)
+        while(cursor.moveToNext()){
+            veiculo = veiculoFromCursor(cursor)
         }
         cursor.close()
         db.close()
-        callback(veiculo)
+        return veiculo
     }
 
     private fun veiculoFromCursor(cursor: Cursor): Carro {
