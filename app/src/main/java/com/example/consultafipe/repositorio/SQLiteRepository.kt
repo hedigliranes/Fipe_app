@@ -43,7 +43,7 @@ class SQLiteRepository(ctx: Context):VeiculoRepository {
 
         val cv = ContentValues().apply {
             put(COLUMN_VALOR,veiculo.Valor)
-            put(COLUMN_VALORANTIGO,veiculo.Valor)
+            put(COLUMN_VALORANTIGO,veiculo.ValorAntigo)
             put(COLUMN_ANOMODELO, veiculo.AnoModelo)
             put(COLUMN_CODIGOFIPE, veiculo.CodigoFipe)
             put(COLUMN_COMBUSTIVEL,veiculo.Combustivel)

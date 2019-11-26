@@ -65,7 +65,7 @@ class ConsultaService: JobService()   {
 
 
 
-                            if(valorInt < valorNewInt) {
+                            if(valorInt < valorNewInt || valorInt > valorNewInt ) {
                                 changeValue()
                             }
 

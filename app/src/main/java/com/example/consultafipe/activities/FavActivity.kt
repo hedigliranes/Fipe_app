@@ -76,6 +76,9 @@ class FavActivity : AppCompatActivity() {
         myIntent.putExtra("marca",veiculo.Marca)
         myIntent.putExtra("combustivel",veiculo.Combustivel)
         myIntent.putExtra("mes",veiculo.MesReferencia)
+        myIntent.putExtra("novo",veiculo.Valor)
+        myIntent.putExtra("antigo",veiculo.ValorAntigo)
+        myIntent.putExtra("requestCode", 10)
 
         startActivityForResult(myIntent,10)
 

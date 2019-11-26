@@ -249,6 +249,7 @@ class MainActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         myIntent.putExtra("combustivel",veiculo!!.Combustivel)
         myIntent.putExtra("mes",veiculo!!.MesReferencia)
 
+
         startActivity(myIntent)
     }
 
