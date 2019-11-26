@@ -19,13 +19,13 @@ class VeiculoFavActivity: AppCompatActivity() {
             var valor = intent.getStringExtra("novo").replace("R$ ", "").replace(".", "").replace(
                 ",",
                 ""
-            ).toInt() / 100
+            ).toDouble() / 100
             var valorAntigo =
                 intent.getStringExtra("antigo").replace("R$ ", "").replace(".", "").replace(
                     ",",
                     ""
-                ).toInt() / 100
-            percent.text = "${(((((valor * 100) / valorAntigo)) - 100).toString())}%"
+                ).toDouble() / 100
+            percent.text = String.format("%.2f", (((((valor * 100) / valorAntigo)) - 100))) + "%"
             variacao.text = "Variação de Preço"
 
 
